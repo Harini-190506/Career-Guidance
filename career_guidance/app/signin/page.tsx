@@ -27,23 +27,32 @@ export default function SignInPage() {
     setIsLoading(true)
     setError("")
 
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
 
-      // Mock validation
-      if (formData.email === "demo@example.com" && formData.password === "password") {
-        // Store user info for demo purposes
-        localStorage.setItem("userName", "Jamuna")
-        localStorage.setItem("userEmail", formData.email)
+      const data = await response.json()
 
-        // Redirect to dashboard
-        window.location.href = "/dashboard"
-      } else {
-        setError("Invalid email or password. Try demo@example.com / password")
+      if (!response.ok) {
+        throw new Error(data.message || 'Signin failed')
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again.")
+
+      // Store token and user data
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('user', JSON.stringify(data.user))
+
+      // Redirect to dashboard
+      window.location.href = "/dashboard"
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -94,12 +103,7 @@ export default function SignInPage() {
                   </div>
                 )}
 
-                {/* Demo Credentials */}
-                <div className="p-3 rounded-lg border border-blue-500/20 bg-blue-900/10">
-                  <p className="text-sm text-blue-400 mb-2">Demo Credentials:</p>
-                  <p className="text-xs opacity-80">Email: demo@example.com</p>
-                  <p className="text-xs opacity-80">Password: password</p>
-                </div>
+
 
                 {/* Email Field */}
                 <div className="space-y-2">

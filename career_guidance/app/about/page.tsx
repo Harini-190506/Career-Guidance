@@ -8,27 +8,18 @@ import { Footer } from "@/components/footer"
 export default function AboutPage() {
   const teamMembers = [
     {
-      name: "Dr. Sarah Chen",
-      role: "AI Research Lead",
-      description: "PhD in Machine Learning with 10+ years in career prediction algorithms",
-      icon: Brain,
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Product Manager",
-      description: "Former career counselor with expertise in student guidance systems",
+      name: "Jamunadevi",
+      role: "Full stack developer",
       icon: Target,
     },
     {
-      name: "Emily Johnson",
+      name: "Jayaharini",
       role: "UX Designer",
-      description: "Specializes in creating intuitive interfaces for educational platforms",
-      icon: Heart,
+      icon: Target,
     },
     {
-      name: "David Kim",
+      name: "Jayesh",
       role: "Full Stack Developer",
-      description: "Expert in building scalable web applications and data visualization",
       icon: Zap,
     },
   ]
@@ -230,9 +221,6 @@ export default function AboutPage() {
                     {member.role}
                   </Badge>
                 </CardHeader>
-                <CardContent>
-                  <p className="opacity-80 text-sm">{member.description}</p>
-                </CardContent>
               </Card>
             ))}
           </div>

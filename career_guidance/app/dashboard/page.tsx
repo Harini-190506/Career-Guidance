@@ -10,19 +10,54 @@ import { CareerAnalytics } from "@/components/career-analytics"
 import { CareerAssessment } from "@/components/career-assessment"
 import { MLPredictions } from "@/components/ml-predictions"
 import { CareerRoadmap } from "@/components/career-roadmap"
-import { AdminPanel } from "@/components/admin-panel"
+import AdminPanel from "@/components/admin-panel"
 import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 
 export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [currentUser] = useState({
-    name: (typeof window !== "undefined" && localStorage.getItem("userName")) || "Student",
-    role: "student", // or "admin"
+  const [userData, setUserData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          window.location.href = '/signin'
+          return
+        }
+
+        const response = await fetch('/api/user/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data')
+        }
+
+        const data = await response.json()
+        setUserData(data.user)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+        window.location.href = '/signin'
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserData()
+  }, [])
+
+  const currentUser = {
+    name: userData?.name || "Student",
+    role: "student",
     completedAssessments: 2,
     careerMatches: 3,
     progressScore: 78,
-  })
+  }
 
   const [platformStats] = useState({
     totalStudents: 1247,
@@ -36,12 +71,12 @@ export default function Dashboard() {
     return () => clearInterval(timer)
   }, [])
 
-  const recentPredictions = [
+  const recentPredictions = userData ? [
     {
-      career: "Data Scientist",
-      confidence: 92,
-      match: "Excellent",
-      color: "text-green-400",
+      career: userData.predicted_career || "Career Analysis",
+      confidence: Math.round((userData.confidence_score || 0.8) * 100),
+      match: userData.confidence_score > 0.8 ? "Excellent" : userData.confidence_score > 0.6 ? "Very Good" : "Good",
+      color: userData.confidence_score > 0.8 ? "text-green-400" : userData.confidence_score > 0.6 ? "text-blue-400" : "text-yellow-400",
     },
     {
       career: "Software Engineer",
@@ -55,7 +90,18 @@ export default function Dashboard() {
       match: "Good",
       color: "text-yellow-400",
     },
-  ]
+  ] : []
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#151515", color: "#B4A5A5" }}>
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p>Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#151515", color: "#B4A5A5" }}>
