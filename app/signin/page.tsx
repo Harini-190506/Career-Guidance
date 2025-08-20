@@ -32,6 +32,8 @@
 @@ .. @@
                  {/* Error Message */}
                  {error && (
+)
+}
 -                  <div className="p-3 rounded-lg border border-red-500/20 bg-red-900/10">
 +                  <div className="p-4 rounded-lg border border-red-500/30 bg-red-500/10 backdrop-blur-sm">
                      <div className="flex items-center space-x-2">
@@ -131,6 +133,8 @@
                    <Button
                      type="button"
                      variant="outline"
+                 )
+                 }
 -                    className="border-gray-600 bg-transparent"
 -                    style={{ color: "#B4A5A5" }}
 +                    className="border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 transition-all duration-300"

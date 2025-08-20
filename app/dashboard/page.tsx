@@ -1,6 +1,8 @@
 @@ .. @@
    if (loading) {
      return (
+     )
+   }
 -      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#151515", color: "#B4A5A5" }}>
 +      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
          <div className="text-center">
@@ -106,6 +108,9 @@
                    {recentPredictions.map((prediction, index) => (
                      <div
                        key={index}
+             )
+             )
+             }
 -                      className="p-4 rounded-lg border border-gray-600"
 -                      style={{ backgroundColor: "#151515" }}
 +                      className="p-4 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300"

@@ -14,3 +14,5 @@
 -  cached = global.mongoose = { conn: null, promise: null };
 +  cached = (global as any).mongoose = { conn: null, promise: null };
  }
+
+export default cached
